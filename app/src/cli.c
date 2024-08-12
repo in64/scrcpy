@@ -1813,6 +1813,9 @@ get_record_format(const char *name) {
     if (!strcmp(name, "mp4")) {
         return SC_RECORD_FORMAT_MP4;
     }
+    if (!strcmp(name, "flv")) {
+        return SC_RECORD_FORMAT_FLV;
+    }
     if (!strcmp(name, "mkv")) {
         return SC_RECORD_FORMAT_MKV;
     }
