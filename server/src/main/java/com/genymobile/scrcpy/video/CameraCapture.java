@@ -328,13 +328,33 @@ public class CameraCapture extends SurfaceCapture {
             requestBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, new Range<>(fps, fps));
         }
 
-        if (eis) {
-            requestBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE, CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON);
-        }
+        CameraManager cameraManager = ServiceManager.getCameraManager();
+        CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
 
         if (ois) {
-            requestBuilder.set(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE, CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_ON);
+            final int[] availableOpticalStabilization = characteristics.get(
+                    CameraCharacteristics.LENS_INFO_AVAILABLE_OPTICAL_STABILIZATION);
+            if (availableOpticalStabilization != null) {
+                for (int mode : availableOpticalStabilization) {
+                    if (mode == CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_ON) {
+                        requestBuilder.set(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE,
+                                CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_ON);
+                    }
+                }
+            }
         }
+
+        if (eis) {
+            final int[] availableVideoStabilization = characteristics.get(
+                    CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES);
+            for (int mode : availableVideoStabilization) {
+                if (mode == CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON) {
+                    requestBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE,
+                            CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON);
+                }
+            }
+        }
+
         return requestBuilder.build();
     }
 
