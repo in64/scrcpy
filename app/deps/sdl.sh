@@ -15,7 +15,7 @@ if [[ -d "$PROJECT_DIR" ]]
 then
     echo "$PWD/$PROJECT_DIR" found
 else
-    get_file "https://github.com/libsdl-org/SDL/archive/refs/tags/release-$VERSION.tar.gz" "$FILENAME" "$SHA256SUM"
+    get_file "https://spu.deno.dev/github.com/libsdl-org/SDL/archive/refs/tags/release-$VERSION.tar.gz" "$FILENAME" "$SHA256SUM"
     tar xf "$FILENAME"  # First level directory is "$PROJECT_DIR"
 fi
 
