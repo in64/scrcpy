@@ -46,6 +46,9 @@ public class CameraCapture extends SurfaceCapture {
     private final int fps;
     private final boolean highSpeed;
 
+    private final boolean eis;
+    private final boolean ois;
+
     private String cameraId;
     private Size size;
 
@@ -56,8 +59,7 @@ public class CameraCapture extends SurfaceCapture {
 
     private final AtomicBoolean disconnected = new AtomicBoolean();
 
-    public CameraCapture(String explicitCameraId, CameraFacing cameraFacing, Size explicitSize, int maxSize, CameraAspectRatio aspectRatio, int fps,
-            boolean highSpeed) {
+    public CameraCapture(String explicitCameraId, CameraFacing cameraFacing, Size explicitSize, int maxSize, CameraAspectRatio aspectRatio, int fps, boolean highSpeed, boolean eis, boolean ois) {
         this.explicitCameraId = explicitCameraId;
         this.cameraFacing = cameraFacing;
         this.explicitSize = explicitSize;
@@ -65,6 +67,8 @@ public class CameraCapture extends SurfaceCapture {
         this.aspectRatio = aspectRatio;
         this.fps = fps;
         this.highSpeed = highSpeed;
+        this.eis = eis;
+        this.ois = ois;
     }
 
     @Override
@@ -119,8 +123,7 @@ public class CameraCapture extends SurfaceCapture {
     }
 
     @TargetApi(Build.VERSION_CODES.N)
-    private static Size selectSize(String cameraId, Size explicitSize, int maxSize, CameraAspectRatio aspectRatio, boolean highSpeed)
-            throws CameraAccessException {
+    private static Size selectSize(String cameraId, Size explicitSize, int maxSize, CameraAspectRatio aspectRatio, boolean highSpeed) throws CameraAccessException {
         if (explicitSize != null) {
             return explicitSize;
         }
@@ -325,6 +328,13 @@ public class CameraCapture extends SurfaceCapture {
             requestBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, new Range<>(fps, fps));
         }
 
+        if (eis) {
+            requestBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE, CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON);
+        }
+
+        if (ois) {
+            requestBuilder.set(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE, CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_ON);
+        }
         return requestBuilder.build();
     }
 

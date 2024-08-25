@@ -415,6 +415,8 @@ scrcpy(struct scrcpy_options *options) {
         .power_on = options->power_on,
         .kill_adb_on_close = options->kill_adb_on_close,
         .camera_high_speed = options->camera_high_speed,
+        .camera_eis = options->camera_eis,
+        .camera_ois = options->camera_ois,
         .list = options->list,
     };
 
