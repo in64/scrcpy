@@ -473,6 +473,8 @@ scrcpy(struct scrcpy_options *options) {
         .camera_high_speed = options->camera_high_speed,
         .vd_destroy_content = options->vd_destroy_content,
         .vd_system_decorations = options->vd_system_decorations,
+        .camera_eis = options->camera_eis,
+        .camera_ois = options->camera_ois,
         .list = options->list,
     };
 

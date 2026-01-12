@@ -93,6 +93,8 @@ enum {
     OPT_CAMERA_AR,
     OPT_CAMERA_FPS,
     OPT_CAMERA_HIGH_SPEED,
+    OPT_CAMERA_EIS,
+    OPT_CAMERA_OIS,
     OPT_DISPLAY_ORIENTATION,
     OPT_RECORD_ORIENTATION,
     OPT_ORIENTATION,
@@ -306,6 +308,16 @@ static const struct sc_option options[] = {
         .text = "Specify the device camera id to mirror.\n"
                 "The available camera ids can be listed by:\n"
                 "    scrcpy --list-cameras",
+    },
+    {
+        .longopt_id = OPT_CAMERA_EIS,
+        .longopt = "camera-eis",
+        .text = "Enable camera eis",
+    },
+    {
+        .longopt_id = OPT_CAMERA_OIS,
+        .longopt = "camera-ois",
+        .text = "Enable camera ois",
     },
     {
         .longopt_id = OPT_CAMERA_SIZE,
@@ -1917,6 +1929,9 @@ get_record_format(const char *name) {
     if (!strcmp(name, "mp4")) {
         return SC_RECORD_FORMAT_MP4;
     }
+    if (!strcmp(name, "flv")) {
+        return SC_RECORD_FORMAT_FLV;
+    }
     if (!strcmp(name, "mkv")) {
         return SC_RECORD_FORMAT_MKV;
     }
@@ -2780,6 +2795,12 @@ parse_args_with_getopt(struct scrcpy_cli_args *args, int argc, char *argv[],
             case OPT_CAMERA_HIGH_SPEED:
                 opts->camera_high_speed = true;
                 break;
+            case OPT_CAMERA_EIS:
+                opts->camera_eis = true;
+                break;
+            case OPT_CAMERA_OIS:
+                opts->camera_ois = true;
+                break;
             case OPT_NO_WINDOW:
                 opts->window = false;
                 break;
@@ -3114,6 +3135,8 @@ parse_args_with_getopt(struct scrcpy_cli_args *args, int argc, char *argv[],
             || opts->camera_facing != SC_CAMERA_FACING_ANY
             || opts->camera_fps
             || opts->camera_high_speed
+            || opts->camera_eis
+            || opts->camera_ois
             || opts->camera_size) {
         LOGE("Camera options are only available with --video-source=camera");
         return false;

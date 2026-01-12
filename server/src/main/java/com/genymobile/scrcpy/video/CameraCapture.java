@@ -64,6 +64,9 @@ public class CameraCapture extends SurfaceCapture {
     private final Orientation captureOrientation;
     private final float angle;
 
+    private final boolean eis;
+    private final boolean ois;
+
     private String cameraId;
     private Size captureSize;
     private Size videoSize; // after OpenGL transforms
@@ -90,6 +93,8 @@ public class CameraCapture extends SurfaceCapture {
         this.captureOrientation = options.getCaptureOrientation();
         assert captureOrientation != null;
         this.angle = options.getAngle();
+        this.eis = options.getCameraEis();
+        this.ois = options.getCameraOis();
     }
 
     @Override
@@ -386,6 +391,33 @@ public class CameraCapture extends SurfaceCapture {
 
         if (fps > 0) {
             requestBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, new Range<>(fps, fps));
+        }
+
+        CameraManager cameraManager = ServiceManager.getCameraManager();
+        CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+
+        if (ois) {
+            final int[] availableOpticalStabilization = characteristics.get(
+                    CameraCharacteristics.LENS_INFO_AVAILABLE_OPTICAL_STABILIZATION);
+            if (availableOpticalStabilization != null) {
+                for (int mode : availableOpticalStabilization) {
+                    if (mode == CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_ON) {
+                        requestBuilder.set(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE,
+                                CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_ON);
+                    }
+                }
+            }
+        }
+
+        if (eis) {
+            final int[] availableVideoStabilization = characteristics.get(
+                    CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES);
+            for (int mode : availableVideoStabilization) {
+                if (mode == CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON) {
+                    requestBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE,
+                            CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON);
+                }
+            }
         }
 
         return requestBuilder.build();
