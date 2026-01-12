@@ -339,6 +339,12 @@ execute_server(struct sc_server *server,
     if (params->camera_high_speed) {
         ADD_PARAM("camera_high_speed=true");
     }
+    if (params->camera_eis) {
+        ADD_PARAM("camera_eis=true");
+    }
+    if (params->camera_ois) {
+        ADD_PARAM("camera_ois=true");
+    }
     if (params->show_touches) {
         ADD_PARAM("show_touches=true");
     }

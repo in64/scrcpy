@@ -23,6 +23,7 @@ enum sc_record_format {
     SC_RECORD_FORMAT_MP4,
     SC_RECORD_FORMAT_MKV,
     SC_RECORD_FORMAT_M4A,
+    SC_RECORD_FORMAT_FLV,
     SC_RECORD_FORMAT_MKA,
     SC_RECORD_FORMAT_OPUS,
     SC_RECORD_FORMAT_AAC,
@@ -290,6 +291,8 @@ struct scrcpy_options {
     bool require_audio;
     bool kill_adb_on_close;
     bool camera_high_speed;
+    bool camera_eis;
+    bool camera_ois;
 #define SC_OPTION_LIST_ENCODERS 0x1
 #define SC_OPTION_LIST_DISPLAYS 0x2
 #define SC_OPTION_LIST_CAMERAS 0x4

@@ -41,6 +41,8 @@ public class Options {
     private CameraAspectRatio cameraAspectRatio;
     private int cameraFps;
     private boolean cameraHighSpeed;
+    private boolean cameraEis;
+    private boolean cameraOis;
     private boolean showTouches;
     private boolean stayAwake;
     private List<CodecOption> videoCodecOptions;
@@ -160,7 +162,12 @@ public class Options {
     public boolean getCameraHighSpeed() {
         return cameraHighSpeed;
     }
-
+    public boolean getCameraEis() {
+        return cameraEis;
+    }
+    public boolean getCameraOis() {
+        return cameraOis;
+    }
     public boolean getShowTouches() {
         return showTouches;
     }
@@ -417,6 +424,12 @@ public class Options {
                     break;
                 case "camera_high_speed":
                     options.cameraHighSpeed = Boolean.parseBoolean(value);
+                    break;
+                case "camera_eis":
+                    options.cameraEis = Boolean.parseBoolean(value);
+                    break;
+                case "camera_ois":
+                    options.cameraOis = Boolean.parseBoolean(value);
                     break;
                 case "send_device_meta":
                     options.sendDeviceMeta = Boolean.parseBoolean(value);

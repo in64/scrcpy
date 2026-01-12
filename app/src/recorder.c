@@ -65,6 +65,8 @@ sc_recorder_get_format_name(enum sc_record_format format) {
         case SC_RECORD_FORMAT_M4A:
         case SC_RECORD_FORMAT_AAC:
             return "mp4";
+        case SC_RECORD_FORMAT_FLV:
+            return "flv";
         case SC_RECORD_FORMAT_MKV:
         case SC_RECORD_FORMAT_MKA:
             return "matroska";
@@ -253,7 +255,11 @@ sc_recorder_process_header(struct sc_recorder *recorder) {
         }
     }
 
-    bool ok = avformat_write_header(recorder->ctx, NULL) >= 0;
+    AVDictionary* opt = NULL;
+    if (recorder->format == SC_RECORD_FORMAT_FLV) {
+        av_dict_set(&opt, "flvflags", "no_duration_filesize", 0);
+    }
+    bool ok = avformat_write_header(recorder->ctx, &opt) >= 0;
     if (!ok) {
         LOGE("Failed to write header to %s", recorder->filename);
         goto end;
